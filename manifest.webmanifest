@@ -1,17 +1,32 @@
 {
-  "name": "Operation Vice City \u2014 Launch Headquarters V9",
-  "short_name": "Vice City V9",
+  "id": "./",
+  "name": "Operation Vice City \u2014 Ultimate Command Centre",
+  "short_name": "Vice City",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#170f1d",
-  "theme_color": "#211226",
-  "description": "Vice City cinematic GTA VI launch command centre.",
+  "orientation": "any",
+  "background_color": "#0b0815",
+  "theme_color": "#100b20",
+  "description": "Your GTA VI launch command centre.",
   "icons": [
     {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
