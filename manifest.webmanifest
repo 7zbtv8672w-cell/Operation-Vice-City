@@ -1,0 +1,17 @@
+{
+  "name": "Operation Vice City \u2014 Launch Headquarters",
+  "short_name": "Vice City V8",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#170f1d",
+  "theme_color": "#211226",
+  "description": "Your personal GTA VI launch command centre.",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
