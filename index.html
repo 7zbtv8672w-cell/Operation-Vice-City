@@ -57,9 +57,39 @@ main{min-width:0}.view{display:none;animation:fade .28s ease}.view.active{displa
 .map-chip{border:1px solid var(--line);background:#ffffff08;color:var(--text);border-radius:999px;padding:7px 10px;font-size:10px}
 .map-fallback{padding:12px;background:#171026;color:var(--muted);font-size:11px;line-height:1.6}
 @media(max-width:680px){.map-frame{height:68vh;min-height:480px}}
+
+/* V11 cinematic boot */
+#cinematicBoot{position:fixed;inset:0;z-index:9999;background:#080610 url('./vice-city-cinematic.jpg') center center/cover no-repeat;display:grid;place-items:center;overflow:hidden;isolation:isolate;transition:opacity .8s ease,visibility .8s ease}
+#cinematicBoot:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#080610a8 0%,#08061020 54%,#08061050 100%),linear-gradient(0deg,#080610c9 0%,transparent 44%,#08061030 100%);z-index:-1}
+#cinematicBoot:after{content:"";position:absolute;inset:-30%;background:linear-gradient(110deg,transparent 35%,#ffffff0a 48%,transparent 60%);transform:translateX(-60%);pointer-events:none}
+#cinematicBoot.intro-running:after{animation:bootSweep 3.4s ease-in-out infinite}
+@keyframes bootSweep{to{transform:translateX(60%)}}
+#cinematicBoot.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.boot-panel{width:min(680px,calc(100% - 34px));margin-top:auto;margin-bottom:clamp(28px,7vh,70px);padding:20px 22px;border:1px solid #ff73b65c;border-radius:18px;background:#0b0719c9;box-shadow:0 20px 80px #0009,0 0 35px #ff4fa322;backdrop-filter:blur(14px);color:#fff;transform:translateY(20px);opacity:0;transition:.5s ease}
+#cinematicBoot.intro-running .boot-panel{transform:none;opacity:1}
+.boot-kicker{font-size:9px;letter-spacing:.32em;color:#ffb16b;font-weight:900}.boot-title{font-size:clamp(24px,5vw,42px);font-weight:950;letter-spacing:.08em;margin:7px 0 3px;text-shadow:0 0 25px #ff4fa366}.boot-title span{color:#ff5da8}.boot-sub{font-size:10px;letter-spacing:.18em;color:#cbb8d2}
+.boot-status{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:17px;font:10px ui-monospace,monospace;letter-spacing:.09em;color:#f5d8eb}.boot-track{height:5px;border-radius:9px;background:#ffffff25;overflow:hidden;margin-top:9px}.boot-track i{display:block;width:0;height:100%;background:linear-gradient(90deg,#ff4fa3,#ffb16b);box-shadow:0 0 15px #ff4fa3;transition:width .2s linear}
+.boot-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:15px}.boot-enter{border:0;border-radius:999px;padding:12px 19px;background:linear-gradient(100deg,#ff4fa3,#ffad67);color:#1b0b1c;font-size:10px;font-weight:950;letter-spacing:.12em;box-shadow:0 0 28px #ff4fa355}.boot-skip{border:1px solid #ffffff44;background:#ffffff0c;color:#fff;border-radius:999px;padding:10px 14px;font-size:9px;letter-spacing:.12em}.boot-enter:active,.boot-skip:active{transform:scale(.97)}
+#cinematicBoot.intro-running .boot-enter{display:none}
+.boot-sound{position:absolute;top:18px;right:18px;border:1px solid #ffffff55;border-radius:999px;background:#100b20aa;color:white;padding:9px 13px;font-size:9px;letter-spacing:.1em}
+@media(max-width:600px){#cinematicBoot{background-position:44% center}.boot-panel{margin-bottom:calc(24px + env(safe-area-inset-bottom));padding:16px}.boot-actions{align-items:stretch}.boot-enter,.boot-skip{font-size:8px;padding:11px 12px}}
+@media(prefers-reduced-motion:reduce){#cinematicBoot:after{display:none}*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
 </style>
 </head>
 <body>
+<div id="cinematicBoot" role="dialog" aria-label="Vice City Command Centre cinematic introduction" aria-modal="true">
+ <button class="boot-sound" id="bootSound" type="button">♫ SOUND ON</button>
+ <div class="boot-panel">
+  <div class="boot-kicker">LEONIDA · FLORIDA · 2026</div>
+  <div class="boot-title">VICE CITY <span>COMMAND CENTRE</span></div>
+  <div class="boot-sub">YOUR CITY. YOUR OPERATION. YOUR STORY.</div>
+  <div class="boot-status"><span id="bootStatus">SYSTEMS STANDING BY</span><strong id="bootPercent">READY</strong></div>
+  <div class="boot-track"><i id="bootProgress"></i></div>
+  <div class="boot-actions"><button class="boot-enter" id="bootEnter" type="button">▶ ENTER VICE CITY</button><button class="boot-skip" id="bootSkip" type="button">SKIP INTRO ↗</button></div>
+ </div>
+</div>
+
 <header class="topbar">
  <div class="brand"><div class="brand-mark">VC</div><div><strong>OPERATION VICE CITY</strong><span>ULTIMATE COMMAND CENTRE</span></div></div>
  <div class="top-actions"><span class="pill" id="clock">--:--:-- UK</span><button class="iconbtn" id="musicToggle" aria-label="Toggle ambience">♫</button><button class="iconbtn" id="launchToggle" aria-label="Launch mode">⛶</button></div>
@@ -155,7 +185,7 @@ main{min-width:0}.view{display:none;animation:fade .28s ease}.view.active{displa
 
 <section class="view" id="settings">
  <div class="section-head"><div><h2>COMMAND SETTINGS</h2><p>Personalise and protect your operation data</p></div><span class="pill">PREFERENCES</span></div>
- <div class="grid"><div class="card span-6"><div class="card-title"><h3>Launch configuration</h3></div><label class="muted" style="font-size:10px">LAUNCH DATE & TIME (UK)</label><input class="field" id="launchDate" type="datetime-local" style="margin:7px 0 12px"><button class="primary smallbtn" id="saveLaunchDate">SAVE COUNTDOWN</button><p class="muted" style="font-size:10px">Default: 19 November 2026 at 00:00 UK time.</p></div><div class="card span-6"><div class="card-title"><h3>Data management</h3></div><p class="muted" style="font-size:11px">Your tasks, inventory, schedule, notes and settings are saved in this browser on this device.</p><div class="btnrow"><button class="smallbtn" id="exportData">EXPORT BACKUP</button><button class="smallbtn" id="importDataBtn">IMPORT BACKUP</button><input id="importData" type="file" accept="application/json" hidden></div><div class="btnrow"><button class="danger smallbtn" id="resetAll">RESET ALL APP DATA</button></div><p class="muted" style="font-size:9px">Export a backup before clearing browser data or changing devices.</p></div><div class="card span-12"><div class="card-title"><h3>About this command centre</h3><span class="tag">PWA · OFFLINE READY</span></div><p class="muted" style="font-size:11px;line-height:1.7">Operation Vice City is a locally stored Progressive Web App. It can be installed on your iPhone Home Screen and opened like an app. The service worker caches the interface for offline use after the first visit. Music links open your selected provider. Xbox, WiZ lighting, temperature and battery status are not directly connected; those checks are manually recorded.</p><div class="pill">BUILD: ULTIMATE EDITION · V10.2 MAP INTEGRATION</div></div></div>
+ <div class="grid"><div class="card span-6"><div class="card-title"><h3>Launch configuration</h3></div><label class="muted" style="font-size:10px">LAUNCH DATE & TIME (UK)</label><input class="field" id="launchDate" type="datetime-local" style="margin:7px 0 12px"><button class="primary smallbtn" id="saveLaunchDate">SAVE COUNTDOWN</button><p class="muted" style="font-size:10px">Default: 19 November 2026 at 00:00 UK time.</p></div><div class="card span-6"><div class="card-title"><h3>Data management</h3></div><p class="muted" style="font-size:11px">Your tasks, inventory, schedule, notes and settings are saved in this browser on this device.</p><div class="btnrow"><button class="smallbtn" id="exportData">EXPORT BACKUP</button><button class="smallbtn" id="importDataBtn">IMPORT BACKUP</button><input id="importData" type="file" accept="application/json" hidden></div><div class="btnrow"><button class="danger smallbtn" id="resetAll">RESET ALL APP DATA</button></div><p class="muted" style="font-size:9px">Export a backup before clearing browser data or changing devices.</p></div><div class="card span-12"><div class="card-title"><h3>About this command centre</h3><span class="tag">PWA · OFFLINE READY</span></div><p class="muted" style="font-size:11px;line-height:1.7">Operation Vice City is a locally stored Progressive Web App. It can be installed on your iPhone Home Screen and opened like an app. The service worker caches the interface for offline use after the first visit. Music links open your selected provider. Xbox, WiZ lighting, temperature and battery status are not directly connected; those checks are manually recorded.</p><div class="pill">BUILD: V11 · CINEMATIC BOOT EDITION · MAP UNCHANGED</div></div></div>
 </section>
 <div class="footer">OPERATION VICE CITY · ULTIMATE COMMAND CENTRE · WELCOME TO THE NEON COAST</div>
 </main></div>
@@ -268,6 +298,27 @@ $('#importDataBtn').onclick=()=>$('#importData').click();
 $('#importData').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let v=JSON.parse(await f.text());state={...structuredClone(defaults),...v};save();renderAll();toast('Backup imported')}catch(err){toast('Invalid backup file')}};
 $('#resetAll').onclick=()=>{if(confirm('This permanently clears this app’s locally saved tasks, notes and settings on this device. Continue?')){localStorage.removeItem(KEY);state=structuredClone(defaults);save();renderAll();toast('App data reset')}};
 function renderAll(){renderTasks();renderEvents();renderStock();renderSetup();renderDiscoveries();renderIntel();$('#playlistUrl').value=state.playlistUrl||'';$('#exploreNotes').value=state.exploreNotes||'';$('#soundToggle').textContent='SOUND FX: '+(state.soundFx?'ON':'OFF');$('#volume').value=state.volume||35;$('#volumeValue').textContent=(state.volume||35)+'%';renderDate();refreshDashboard()}
+
+// V11: original 10-second synthwave boot score, generated locally with Web Audio (no external track or licence dependency).
+let bootAudio=null,bootNodes=[],bootTimers=[],bootStarted=false,bootFinished=false,bootStartAt=0;
+function bootTone(ctx,freq,start,duration,gain,type='sine',detune=0){let o=ctx.createOscillator(),g=ctx.createGain(),lp=ctx.createBiquadFilter();o.type=type;o.frequency.setValueAtTime(freq,start);if(detune)o.detune.value=detune;lp.type='lowpass';lp.frequency.value=type==='sawtooth'?1500:2600;g.gain.setValueAtTime(.0001,start);g.gain.linearRampToValueAtTime(gain,start+.35);g.gain.setValueAtTime(gain,start+Math.max(.36,duration-.45));g.gain.exponentialRampToValueAtTime(.0001,start+duration);o.connect(lp);lp.connect(g);g.connect(ctx.destination);o.start(start);o.stop(start+duration+.04);bootNodes.push(o,g,lp)}
+function bootNoise(ctx,start,duration,gain,filterFreq){let n=ctx.createBufferSource(),buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*duration),ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*.5;n.buffer=buf;let f=ctx.createBiquadFilter(),g=ctx.createGain();f.type='lowpass';f.frequency.value=filterFreq;g.gain.setValueAtTime(.0001,start);g.gain.linearRampToValueAtTime(gain,start+1.2);g.gain.setValueAtTime(gain,start+duration-1);g.gain.exponentialRampToValueAtTime(.0001,start+duration);n.connect(f);f.connect(g);g.connect(ctx.destination);n.start(start);n.stop(start+duration);bootNodes.push(n,f,g)}
+function startBootScore(){try{let AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;bootAudio=bootAudio||new AC();bootAudio.resume();let c=bootAudio,t=c.currentTime+.08;bootNodes=[];
+// distant surf / city air, a warm evolving minor-9 pad and a rising neon arpeggio
+bootNoise(c,t,10.4,.018,520);bootTone(c,55,t,9.8,.035,'sine');
+let chords=[[110,164.81,196,261.63],[98,146.83,174.61,233.08],[130.81,164.81,196,261.63],[110,164.81,220,329.63]];
+chords.forEach((ch,ci)=>ch.forEach((f,i)=>bootTone(c,f,t+ci*2.35,3.0,.024+(i===0?.018:0),'triangle',i%2?4:-4)));
+let arp=[440,523.25,659.25,783.99,659.25,523.25,587.33,698.46,880,1046.5,880,698.46,783.99,987.77,1174.66,1567.98];
+arp.forEach((f,i)=>bootTone(c,f,t+1.15+i*.48,.42,.018+(i>11?.014:0),'sine'));
+[0,2.35,4.7,7.05].forEach((v,i)=>bootTone([55,49,65.4,55][i],t+v,1.8,.055,'sine'));
+// final cinematic impact and bright resolve
+bootTone(c,65.41,t+8.45,1.35,.12,'sine');bootTone(c,130.81,t+8.45,1.1,.055,'triangle');[523.25,659.25,783.99,1046.5].forEach((f,i)=>bootTone(c,f,t+8.58,.95,.035,'sine'));
+}catch(e){/* visual boot remains fully functional if audio is unavailable */}}
+function finishBoot(){if(bootFinished)return;bootFinished=true;bootTimers.forEach(clearTimeout);bootTimers=[];let el=$('#cinematicBoot');el.classList.add('hidden');setTimeout(()=>el.remove(),900)}
+function runBoot(){if(bootStarted||bootFinished)return;bootStarted=true;$('#cinematicBoot').classList.add('intro-running');startBootScore();let steps=[[0,'INITIALISING VICE CITY SYSTEMS'],[1700,'CONNECTING TO LOCAL DATABASE'],[3700,'LOADING MAP DATA'],[5900,'PREPARING COMMAND CENTRE'],[8200,'ALL SYSTEMS ONLINE']];steps.forEach(([ms,label])=>bootTimers.push(setTimeout(()=>{$('#bootStatus').textContent=label;$('#bootPercent').textContent=Math.min(100,Math.round(ms/10000*100))+'%';$('#bootProgress').style.width=Math.min(100,Math.round(ms/10000*100))+'%'},ms)));bootTimers.push(setTimeout(()=>{$('#bootPercent').textContent='100%';$('#bootProgress').style.width='100%';finishBoot()},10000));}
+$('#bootEnter').addEventListener('click',runBoot);$('#bootSkip').addEventListener('click',finishBoot);$('#bootSound').addEventListener('click',()=>{if(!bootStarted)runBoot();$('#bootSound').textContent='♫ SOUND ENABLED';});
+// The intro is presented on each fresh app launch; users can always skip it.
+
 buildNav();renderAll();updateClock();updateCountdown();setInterval(updateClock,1000);setInterval(updateCountdown,1000);
 if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 let deferredPrompt;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;let b=document.createElement('button');b.className='smallbtn';b.textContent='INSTALL APP';b.onclick=async()=>{deferredPrompt.prompt();deferredPrompt=null;b.remove()};$('.top-actions').prepend(b)});

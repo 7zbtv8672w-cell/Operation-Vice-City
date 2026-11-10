@@ -1,42 +1,29 @@
-# Operation Vice City — Ultimate Edition V10.2
+# Operation Vice City — V11 Cinematic Boot Edition
 
 A cross-platform, installable Progressive Web App (PWA) for the GTA VI launch plan.
 
-## Deploy / update on GitHub Pages
-Upload and commit all files in this package to the root of your existing GitHub Pages repository, replacing the previous V10 files. Keep the repository's existing Pages deployment configuration. Wait for the Pages deployment to finish, then open the published HTTPS URL.
+## Update the existing GitHub Pages app
+1. Download and extract this ZIP.
+2. Open the **same GitHub repository** used for the current Vice City app.
+3. Upload all files from this package to the repository root, replacing files with the same names.
+4. Keep the existing GitHub Pages deployment settings. Commit the changes.
+5. Wait for the Pages deployment to finish, then reopen the same published URL.
 
-## Install on iPhone
-1. Open the published URL in Safari.
-2. Tap Share.
-3. Choose Add to Home Screen.
-4. Enable Open as Web App if shown, then tap Add.
+The update includes `vice-city-cinematic.jpg`; upload it as well as the updated `index.html` and `sw.js`.
 
-## Install on Android
-1. Open the published URL in Chrome.
-2. Tap Install app if Chrome offers it (or ⋮ → Add to Home screen).
-3. Confirm Install / Add.
+## What's new in V11
+- Original 10-second GTA VI-inspired cinematic boot sequence, with skip option
+- Custom Vice City loading artwork
+- Original synthwave soundtrack generated locally with Web Audio (no licensed track required)
+- Ambient city texture, rising synth arpeggio and cinematic final impact
+- Offline caching for the new artwork and updated app shell
+- Existing map, navigation, dashboard, data storage and independent per-device installs preserved
 
-The PNG 192×192 and 512×512 icons are included for Android installation; the Apple touch icon is included for iOS.
+## Install / update on phones
+Use the same GitHub Pages URL already shared with your friends. They do not need a new app or a new installation. On an existing PWA install, fully close and reopen the app after the new GitHub Pages deployment; if the old version remains, open the URL once in the browser while online, then close and reopen the installed app.
 
-## Included
-- Dashboard, mission checklist, editable launch schedule, inventory, setup checks
-- Embedded GTA VI community map for Vice City / Leonida with map search, zoom, pan and native category icons/layers
-- Map attribution: GTADB community landmarks, CC BY 4.0, via GTAMI
-- Original generated synth ambience and sound cues
-- Spotify / Apple Music playlist link handoff
-- Exploration tracker and personal intelligence notebook
-- Editable countdown (default 19 November 2026, 00:00 UK)
-- Local persistence, JSON backup/restore, offline app shell
-- Responsive mobile and desktop layouts
-
-## Important: each person's data
-By default, each installation stores its own tasks, inventory, notes and preferences in that person's browser/device. Your mates can each use their own copy independently. Data does not automatically sync between people or devices. A shared crew board / cloud sync would require a backend and user accounts, which is a separate upgrade.
-
-## Capability notes
-- Xbox, TV, WiZ lighting, fridge temperature and controller battery status are manual checks, not live-connected diagnostics.
-- Licensed music is not streamed by this app; playlist links open the selected music provider.
-- The app must be served over HTTPS (GitHub Pages provides HTTPS) for installation and offline service-worker support.
-
-
-## Map integration notes
-The Map department embeds the live GTAMI community map (`https://gtami.com/en/map/?region=vice-city`). The map provides its own location data, search, zoom, pan and category layers. If the provider blocks embedding in a browser, use the in-app “Open Full Map” link. The community map is not an official Rockstar product; positions and classifications may change. GTADB landmark data is credited under CC BY 4.0.
+## Important notes
+- The cinematic soundtrack is synthesised in the browser and begins after the user taps **ENTER VICE CITY**, because mobile browsers block automatic audio playback without a user gesture.
+- The intro appears on each fresh app launch and can be skipped.
+- The map is unchanged. Each person's app data remains stored locally on their own device.
+- The app is an independent fan-made project and is not affiliated with Rockstar Games.
