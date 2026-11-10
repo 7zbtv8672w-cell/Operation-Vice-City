@@ -1,11 +1,11 @@
 {
-  "name": "Operation Vice City \u2014 Launch Headquarters",
-  "short_name": "Vice City V8",
+  "name": "Operation Vice City \u2014 Launch Headquarters V9",
+  "short_name": "Vice City V9",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#170f1d",
   "theme_color": "#211226",
-  "description": "Your personal GTA VI launch command centre.",
+  "description": "Vice City cinematic GTA VI launch command centre.",
   "icons": [
     {
       "src": "icon.svg",
