@@ -79,14 +79,14 @@ main{min-width:0}.view{display:none;animation:fade .28s ease}.view.active{displa
 </head>
 <body>
 <div id="cinematicBoot" role="dialog" aria-label="Vice City Command Centre cinematic introduction" aria-modal="true">
- <button class="boot-sound" id="bootSound" type="button">♫ SOUND ON</button>
+ <button class="boot-sound" id="bootSound" type="button">♫ ENABLE SOUND</button>
  <div class="boot-panel">
   <div class="boot-kicker">LEONIDA · FLORIDA · 2026</div>
   <div class="boot-title">VICE CITY <span>COMMAND CENTRE</span></div>
   <div class="boot-sub">YOUR CITY. YOUR OPERATION. YOUR STORY.</div>
   <div class="boot-status"><span id="bootStatus">SYSTEMS STANDING BY</span><strong id="bootPercent">READY</strong></div>
   <div class="boot-track"><i id="bootProgress"></i></div>
-  <div class="boot-actions"><button class="boot-enter" id="bootEnter" type="button">▶ ENTER VICE CITY</button><button class="boot-skip" id="bootSkip" type="button">SKIP INTRO ↗</button></div>
+  <div class="boot-actions"><span id="bootCue" style="font-size:9px;letter-spacing:.12em;color:#f8c7df">CINEMATIC SEQUENCE · 10 SECONDS</span><button class="boot-skip" id="bootSkip" type="button">SKIP INTRO ↗</button></div>
  </div>
 </div>
 
@@ -185,7 +185,7 @@ main{min-width:0}.view{display:none;animation:fade .28s ease}.view.active{displa
 
 <section class="view" id="settings">
  <div class="section-head"><div><h2>COMMAND SETTINGS</h2><p>Personalise and protect your operation data</p></div><span class="pill">PREFERENCES</span></div>
- <div class="grid"><div class="card span-6"><div class="card-title"><h3>Launch configuration</h3></div><label class="muted" style="font-size:10px">LAUNCH DATE & TIME (UK)</label><input class="field" id="launchDate" type="datetime-local" style="margin:7px 0 12px"><button class="primary smallbtn" id="saveLaunchDate">SAVE COUNTDOWN</button><p class="muted" style="font-size:10px">Default: 19 November 2026 at 00:00 UK time.</p></div><div class="card span-6"><div class="card-title"><h3>Data management</h3></div><p class="muted" style="font-size:11px">Your tasks, inventory, schedule, notes and settings are saved in this browser on this device.</p><div class="btnrow"><button class="smallbtn" id="exportData">EXPORT BACKUP</button><button class="smallbtn" id="importDataBtn">IMPORT BACKUP</button><input id="importData" type="file" accept="application/json" hidden></div><div class="btnrow"><button class="danger smallbtn" id="resetAll">RESET ALL APP DATA</button></div><p class="muted" style="font-size:9px">Export a backup before clearing browser data or changing devices.</p></div><div class="card span-12"><div class="card-title"><h3>About this command centre</h3><span class="tag">PWA · OFFLINE READY</span></div><p class="muted" style="font-size:11px;line-height:1.7">Operation Vice City is a locally stored Progressive Web App. It can be installed on your iPhone Home Screen and opened like an app. The service worker caches the interface for offline use after the first visit. Music links open your selected provider. Xbox, WiZ lighting, temperature and battery status are not directly connected; those checks are manually recorded.</p><div class="pill">BUILD: V11 · CINEMATIC BOOT EDITION · MAP UNCHANGED</div></div></div>
+ <div class="grid"><div class="card span-6"><div class="card-title"><h3>Launch configuration</h3></div><label class="muted" style="font-size:10px">LAUNCH DATE & TIME (UK)</label><input class="field" id="launchDate" type="datetime-local" style="margin:7px 0 12px"><button class="primary smallbtn" id="saveLaunchDate">SAVE COUNTDOWN</button><p class="muted" style="font-size:10px">Default: 19 November 2026 at 00:00 UK time.</p></div><div class="card span-6"><div class="card-title"><h3>Data management</h3></div><p class="muted" style="font-size:11px">Your tasks, inventory, schedule, notes and settings are saved in this browser on this device.</p><div class="btnrow"><button class="smallbtn" id="exportData">EXPORT BACKUP</button><button class="smallbtn" id="importDataBtn">IMPORT BACKUP</button><input id="importData" type="file" accept="application/json" hidden></div><div class="btnrow"><button class="danger smallbtn" id="resetAll">RESET ALL APP DATA</button></div><p class="muted" style="font-size:9px">Export a backup before clearing browser data or changing devices.</p></div><div class="card span-12"><div class="card-title"><h3>About this command centre</h3><span class="tag">PWA · OFFLINE READY</span></div><p class="muted" style="font-size:11px;line-height:1.7">Operation Vice City is a locally stored Progressive Web App. It can be installed on your iPhone Home Screen and opened like an app. The service worker caches the interface for offline use after the first visit. Music links open your selected provider. Xbox, WiZ lighting, temperature and battery status are not directly connected; those checks are manually recorded.</p><div class="pill">BUILD: V11.1 · AUTO-PLAY CINEMATIC BOOT · MAP UNCHANGED</div></div></div>
 </section>
 <div class="footer">OPERATION VICE CITY · ULTIMATE COMMAND CENTRE · WELCOME TO THE NEON COAST</div>
 </main></div>
@@ -300,10 +300,10 @@ $('#resetAll').onclick=()=>{if(confirm('This permanently clears this app’s loc
 function renderAll(){renderTasks();renderEvents();renderStock();renderSetup();renderDiscoveries();renderIntel();$('#playlistUrl').value=state.playlistUrl||'';$('#exploreNotes').value=state.exploreNotes||'';$('#soundToggle').textContent='SOUND FX: '+(state.soundFx?'ON':'OFF');$('#volume').value=state.volume||35;$('#volumeValue').textContent=(state.volume||35)+'%';renderDate();refreshDashboard()}
 
 // V11: original 10-second synthwave boot score, generated locally with Web Audio (no external track or licence dependency).
-let bootAudio=null,bootNodes=[],bootTimers=[],bootStarted=false,bootFinished=false,bootStartAt=0;
+let bootAudio=null,bootNodes=[],bootTimers=[],bootStarted=false,bootFinished=false,bootStartAt=0,bootAudioPlayed=false;
 function bootTone(ctx,freq,start,duration,gain,type='sine',detune=0){let o=ctx.createOscillator(),g=ctx.createGain(),lp=ctx.createBiquadFilter();o.type=type;o.frequency.setValueAtTime(freq,start);if(detune)o.detune.value=detune;lp.type='lowpass';lp.frequency.value=type==='sawtooth'?1500:2600;g.gain.setValueAtTime(.0001,start);g.gain.linearRampToValueAtTime(gain,start+.35);g.gain.setValueAtTime(gain,start+Math.max(.36,duration-.45));g.gain.exponentialRampToValueAtTime(.0001,start+duration);o.connect(lp);lp.connect(g);g.connect(ctx.destination);o.start(start);o.stop(start+duration+.04);bootNodes.push(o,g,lp)}
 function bootNoise(ctx,start,duration,gain,filterFreq){let n=ctx.createBufferSource(),buf=ctx.createBuffer(1,Math.floor(ctx.sampleRate*duration),ctx.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*.5;n.buffer=buf;let f=ctx.createBiquadFilter(),g=ctx.createGain();f.type='lowpass';f.frequency.value=filterFreq;g.gain.setValueAtTime(.0001,start);g.gain.linearRampToValueAtTime(gain,start+1.2);g.gain.setValueAtTime(gain,start+duration-1);g.gain.exponentialRampToValueAtTime(.0001,start+duration);n.connect(f);f.connect(g);g.connect(ctx.destination);n.start(start);n.stop(start+duration);bootNodes.push(n,f,g)}
-function startBootScore(){try{let AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;bootAudio=bootAudio||new AC();bootAudio.resume();let c=bootAudio,t=c.currentTime+.08;bootNodes=[];
+function startBootScore(){try{let AC=window.AudioContext||window.webkitAudioContext;if(!AC||bootAudioPlayed)return;bootAudio=bootAudio||new AC();bootAudio.resume();let c=bootAudio,t=c.currentTime+.08;bootAudioPlayed=true;bootNodes=[];
 // distant surf / city air, a warm evolving minor-9 pad and a rising neon arpeggio
 bootNoise(c,t,10.4,.018,520);bootTone(c,55,t,9.8,.035,'sine');
 let chords=[[110,164.81,196,261.63],[98,146.83,174.61,233.08],[130.81,164.81,196,261.63],[110,164.81,220,329.63]];
@@ -316,8 +316,9 @@ bootTone(c,65.41,t+8.45,1.35,.12,'sine');bootTone(c,130.81,t+8.45,1.1,.055,'tria
 }catch(e){/* visual boot remains fully functional if audio is unavailable */}}
 function finishBoot(){if(bootFinished)return;bootFinished=true;bootTimers.forEach(clearTimeout);bootTimers=[];let el=$('#cinematicBoot');el.classList.add('hidden');setTimeout(()=>el.remove(),900)}
 function runBoot(){if(bootStarted||bootFinished)return;bootStarted=true;$('#cinematicBoot').classList.add('intro-running');startBootScore();let steps=[[0,'INITIALISING VICE CITY SYSTEMS'],[1700,'CONNECTING TO LOCAL DATABASE'],[3700,'LOADING MAP DATA'],[5900,'PREPARING COMMAND CENTRE'],[8200,'ALL SYSTEMS ONLINE']];steps.forEach(([ms,label])=>bootTimers.push(setTimeout(()=>{$('#bootStatus').textContent=label;$('#bootPercent').textContent=Math.min(100,Math.round(ms/10000*100))+'%';$('#bootProgress').style.width=Math.min(100,Math.round(ms/10000*100))+'%'},ms)));bootTimers.push(setTimeout(()=>{$('#bootPercent').textContent='100%';$('#bootProgress').style.width='100%';finishBoot()},10000));}
-$('#bootEnter').addEventListener('click',runBoot);$('#bootSkip').addEventListener('click',finishBoot);$('#bootSound').addEventListener('click',()=>{if(!bootStarted)runBoot();$('#bootSound').textContent='♫ SOUND ENABLED';});
-// The intro is presented on each fresh app launch; users can always skip it.
+$('#bootSkip').addEventListener('click',finishBoot);$('#bootSound').addEventListener('click',()=>{startBootScore();$('#bootSound').textContent='♫ SOUND ENABLED';});
+// Auto-play the visual cinematic on every fresh app launch. Audio is opt-in because mobile browsers require a user gesture.
+setTimeout(runBoot,350);
 
 buildNav();renderAll();updateClock();updateCountdown();setInterval(updateClock,1000);setInterval(updateCountdown,1000);
 if('serviceWorker' in navigator && location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
