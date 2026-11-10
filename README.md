@@ -1,29 +1,21 @@
-# Operation Vice City — V11.1 Auto-play Cinematic Boot Edition
-
-A cross-platform, installable Progressive Web App (PWA) for the GTA VI launch plan.
+# Operation Vice City — V11.4 Live Portrait Boot
 
 ## Update the existing GitHub Pages app
 1. Download and extract this ZIP.
-2. Open the **same GitHub repository** used for the current Vice City app.
-3. Upload all files from this package to the repository root, replacing files with the same names.
-4. Keep the existing GitHub Pages deployment settings. Commit the changes.
-5. Wait for the Pages deployment to finish, then reopen the same published URL.
+2. Open the same GitHub repository used for the current Vice City app.
+3. Upload all files from this package to the repository root, replacing matching files.
+4. Commit the changes and wait for GitHub Pages to deploy.
+5. Reopen the same app URL. Existing installations keep the same link.
 
-The update includes `vice-city-cinematic.jpg`; upload it as well as the updated `index.html` and `sw.js`.
+## V11.4 fixes
+- Restores the live loading status and animated progress bar on phone screens.
+- Masks the static progress artwork baked into the portrait image so it cannot be mistaken for live progress.
+- Restores the visible skip control on mobile.
+- Soundtrack starts only after tapping ENABLE SOUND, satisfying mobile browser audio restrictions; the button reports whether audio started.
+- Keeps portrait artwork on phones and landscape artwork on wider screens.
+- Leaves the map, dashboard structure, and local data key unchanged.
 
-## What's new in V11
-- Original 10-second GTA VI-inspired cinematic boot sequence that starts automatically, with skip option
-- Custom Vice City loading artwork
-- Original synthwave soundtrack generated locally with Web Audio (no licensed track required)
-- Ambient city texture, rising synth arpeggio and cinematic final impact
-- Offline caching for the new artwork and updated app shell
-- Existing map, navigation, dashboard, data storage and independent per-device installs preserved
-
-## Install / update on phones
-Use the same GitHub Pages URL already shared with your friends. They do not need a new app or a new installation. On an existing PWA install, fully close and reopen the app after the new GitHub Pages deployment; if the old version remains, open the URL once in the browser while online, then close and reopen the installed app.
-
-## Important notes
-- The cinematic visuals start automatically on each fresh app launch. The original synthwave soundtrack is enabled by tapping **ENABLE SOUND**, because mobile browsers block automatic audio playback without a user gesture.
-- The intro appears on each fresh app launch and can be skipped.
-- The map is unchanged. Each person's app data remains stored locally on their own device.
-- The app is an independent fan-made project and is not affiliated with Rockstar Games.
+## Notes
+- The intro lasts 10 seconds unless skipped.
+- Sound is optional and requires a tap on each fresh app launch on iOS.
+- Everyone continues using the same installed app and GitHub Pages URL; no reinstall is required.
