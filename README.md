@@ -1,4 +1,4 @@
-# Operation Vice City — Ultimate Edition V10.1
+# Operation Vice City — Ultimate Edition V10.2
 
 A cross-platform, installable Progressive Web App (PWA) for the GTA VI launch plan.
 
@@ -20,6 +20,8 @@ The PNG 192×192 and 512×512 icons are included for Android installation; the A
 
 ## Included
 - Dashboard, mission checklist, editable launch schedule, inventory, setup checks
+- Embedded GTA VI community map for Vice City / Leonida with map search, zoom, pan and native category icons/layers
+- Map attribution: GTADB community landmarks, CC BY 4.0, via GTAMI
 - Original generated synth ambience and sound cues
 - Spotify / Apple Music playlist link handoff
 - Exploration tracker and personal intelligence notebook
@@ -34,3 +36,7 @@ By default, each installation stores its own tasks, inventory, notes and prefere
 - Xbox, TV, WiZ lighting, fridge temperature and controller battery status are manual checks, not live-connected diagnostics.
 - Licensed music is not streamed by this app; playlist links open the selected music provider.
 - The app must be served over HTTPS (GitHub Pages provides HTTPS) for installation and offline service-worker support.
+
+
+## Map integration notes
+The Map department embeds the live GTAMI community map (`https://gtami.com/en/map/?region=vice-city`). The map provides its own location data, search, zoom, pan and category layers. If the provider blocks embedding in a browser, use the in-app “Open Full Map” link. The community map is not an official Rockstar product; positions and classifications may change. GTADB landmark data is credited under CC BY 4.0.
